@@ -4,20 +4,6 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-#root {
-
-
-}
-#cart-visit {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-
-	justify-content: space-around;
-
-}
-.section-header {
-
-}
 
 input {
 	/* box-sizing:border-box;
@@ -38,6 +24,69 @@ input {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
 }
+.section-header {
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: rgb(248, 244, 244);
+	border: 2px solid rgb(47, 141, 242);
+	border-radius: 10px;
+}
+.header-title {
+	font-size: 30px;
+	color: #444;
+}
+.section-header-btn {
+
+}
+.btn {
+}
+.btn-login {
+}
+.btn-create-visit {
+}
+.btn-hiden{
+	display: none;
+}
+#root {
+	background-color: #b7d6f3;
+	border-radius: 10px;
+	border: 2px solid rgb(47, 141, 242);
+	padding: 0 10px;
+}
+.box-filter {
+	display: flex;
+	padding-top:  15px;
+	
+}
+.box-filter-input {
+	width: 100%;
+	border-radius: 10px;
+	margin: 5px 10px;
+}
+.search-visit {
+	/* line-height: 45px; */
+	width: 380px;
+}
+#cart-visit {
+	position: relative;
+
+	display: grid;
+
+	grid-template-columns:repeat(3, 1fr);
+	/* height: 673px; */
+	/* grid-template-rows: 630px 630px; */
+	grid-gap: 20px;
+	/* grid-auto-rows: auto; */
+	/* grid-row-gap: 10px; */
+	justify-content: space-around;
+
+}
+.section-header {
+
+}
+
 textarea {
 	border: none;
 	font-size: 14px;
@@ -49,8 +98,8 @@ textarea {
 	width: 100%;
 }
 form {
-	/* margin: 0 auto; */
-	background: rgb(208, 187, 187);
+	margin: 0 auto;
+	background: rgb(195, 226, 220);
 width: 600px;
 padding: 30px;
 text-transform: uppercase;
@@ -105,7 +154,7 @@ border-radius: .5em;
 }
 .card-btn-show-more {
 	width: 150px;
-	background-image: url('./img/arrow.png');
+	background-image: url('./img/arrow-234.png');
 	background-repeat: no-repeat;
 	background-position: 93% 45%;
 	background-size: 20px 20px;
@@ -116,9 +165,12 @@ border-radius: .5em;
 
 .select-doctor-container {
 text-transform: uppercase;
-background: rgb(208, 187, 187);
-width: 663px;
-
+background: rgb(195, 226, 220);
+width: 250px;
+padding: 30px;
+border-radius: 10px;
+margin: 0 auto;
+/* border-bottom: none; */
 }
 .select-doctor-container label {
 	padding: 5px 20px;
@@ -140,10 +192,11 @@ border-radius: .5em;
 background-color: #fff;
 }
 .response-box {
-	border: 1px solid #212529;
+	border: 1px solid #75abdf;
 	border-radius: 15px;
 	background-color: rgb(205, 221, 220);
 	width: 300px;
+	/* height: 400px; */
 	font-size: 18px;
 	list-style: none;
 	text-transform: uppercase;
@@ -154,6 +207,15 @@ background-color: #fff;
 .response-item {
 	margin-bottom: 5px;
 }
+
+.response-item.expan {
+	display: none;
+}
+
+.expanded .response-item.expan {
+	display: block;
+}
+
 .card-title {
 	font-size: 24px;
 	text-align: center;
@@ -198,14 +260,22 @@ background-color: #fff;
 	/* white-space: nowrap; */
 }
 .card-img {
+	width: 230px;
+	height: 232px;
 	display: block;
 	margin: 0 auto;
 	border-radius: 50%;
 	margin-top: 15px;
 	margin-bottom: 15px;
-	border: 1px solid #444;
+	border: 2px solid rgb(154, 169, 221);
 }
 .response-item-text {
 	color: cornflowerblue;
 	letter-spacing: 1px;
+}
+/* .expan {
+	height: 600px;
+} */
+.show-less {
+	background-image: url('./img/north-arrow-235.png');
 }

@@ -1,6 +1,7 @@
 export{FormField, Form} ;
  class FormField {
 	constructor(fieldObject, formClass) {
+	
 		this.id = fieldObject.id;
 		this.class = fieldObject.class || `${this.class}__${fieldObject.id}`;
 		this.label = fieldObject.label;
@@ -15,6 +16,8 @@ export{FormField, Form} ;
 		if(this.type == 'textArea'){
 			html = this._getTextArea();
 		}
+
+	
 
 		if(this.type == 'select'){
 			html = this._getDropDown();
@@ -36,6 +39,7 @@ export{FormField, Form} ;
 		}
 		return value;
 	}
+
 
 	_getLabel(){
 		let label = '';
@@ -70,6 +74,7 @@ export{FormField, Form} ;
 
 class Form {
 	constructor(formObject) {
+		
 		this.id = formObject.id;
 		this.class = formObject.class;
 		this.fields = formObject.fields;

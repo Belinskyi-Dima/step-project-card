@@ -10,22 +10,49 @@
 </head>
 <body>
 
+
 	<section class="section">
 		<div class="section-header">
-
+			<img src="./img/logo1.jpeg " width="50px" height="50px" alt="logo">
+			<p class="header-title">Welcome</p>
+			<div class="section-header-btn">
+				<button class="btn btn-login">log in</button>
+				<button  class="btn btn-create-visit">create visit</button>
+			</div>
 		</div>
 		<div id='root'>
-			<div class="select-doctor-container"></div>
-			<div class="doctor-form-container"></div>
+			<div class="box-filter">
+				<div class="bo-filter-input">
+				<input placeholder="search visit" class="box-filter-input search-visit" type="text">
+			</div>
+				<select class="box-filter-input search-all-done" type="text">
+					<option selected value="">all</option>
+					<option value="">Open</option>
+					<option value="">Done</option>
+				</select>
+				<select class="box-filter-input" name="" id="">
+					<option selected value="">All</option>
+					<option value="high">High</option>
+					<option value="normal">Normal</option>
+					<option value="low">Low</option>
+				</select>
+				<button class="btn box-filter-btnserch">Search</button>
+			</div>
+
+			<!-- <div id="cart-visit">
+				
+			</div> -->
 		</div>
+		<div class="select-doctor-container"></div>
+		<div class="doctor-form-container"></div>
 		<div>
 			<p class="card-title">Clients card</p>
-			<p class="card-title">No items have been added</p>
+			<!-- <p class="card-title">No items have been added</p> -->
 			<div id="cart-visit">
 				
 			</div>
 	</div>
-
+	
 		<div class="response_card"></div>
 	</section>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>

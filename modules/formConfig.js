@@ -4,6 +4,7 @@ export default
 		"id": "cardiologist-form",
 		"class": "cardiologist-form",
 		"fields":[
+		
 			{
 				"type": "text",
 				"id": "full-name",
@@ -73,10 +74,10 @@ export default
 			},
 			{
 				"id": "close",
-				"type": "submit",
+				"type": "button",
 				"value": "close",
 				"name": "close",
-				"class": "btn"
+				"class": "btn close"
 			}
 		]
 	},
@@ -84,6 +85,7 @@ export default
 		"id": "dentist-form",
 		"class": "dentist-form",
 		"fields":[
+
 			{
 				"type": "text",
 				"id": "full-name",

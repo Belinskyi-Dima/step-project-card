@@ -5,13 +5,13 @@ import formConfig from "./formConfig.js";
 // const localStorageCreate = new LocalStorage()
 
 
-import Request from "./reqestApi.js";
+import Request from "./requestApi.js";
 // import {createRequest, CreateRequest}from "./reqestApi.js";
 // import {cardVisit } from "./cartVisit.js";
 // export default {createResponseCard}
 
 const request = new Request();
-request.getPost1()
+request.getPosts()
 // request.deletePost(28779)
 // const BASE_URL = "http://localhost:3000";
 const BASE_URL ="https://ajax.test-danit.com/api/v2/cards";
@@ -29,12 +29,13 @@ function formDataObject(formData){
 	return dataObject;
 }
 
+ 
 let selectDoctor = new FormField({
 	"type": "select",
 	"id": "doctor",
 	"class": "doctor-select",
 	"name":"doctor",
-	"label": "Doctor",
+	"label": "create Visit",
 	"options": [{
 		"text":"- Please select a doctor -",
 		"value":""
@@ -61,106 +62,36 @@ $(document).ready(()=>{
 	$doctorDropDawn.on('change', (e)=>{
 		e.preventDefault();
 		let value = e.target.value;
-	
-
-
-	
-		
-
+		console.log( e.target.value);
 		if (value){
 			let form = new Form(formConfig[value]);
 			let $formHTML = $(form.getHTML());
-console.log($formHTML);
 			$formHTML.on('submit', (e) => { //получаем c формы value
 				e.preventDefault();
-				console.log(e.target);
 				
 				let formData = $(e.target).serializeArray();
-				// console.log(formData);
 
 				let visitObject = formDataObject(formData);
-console.log(visitObject);
+				console.log(visitObject);
 				let docVel ={
 					"doctor":`${value}`
 				};
 				
 				let newClient = {...docVel, ...visitObject};
 
-				
-				createClients(newClient);
+				request.creatPost(newClient).then((response)=>{
+					$doctorDropDawn.val('');
+					$formHTML.remove();
+					console.log(newClient);
+				});
 
-				
-				
 			});
-		
 
-
-
-
-// create post-------------11
-			function createClients (post) {
-				// let token = 'a3a8260f-7ba5-4cb2-9c25-c4e532982d51'
-				return	fetch("https://ajax.test-danit.com/api/v2/cards", {
-				method: 'POST',
-				headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${token}`
-				},
-				body: JSON.stringify({post})
-			})
-			.then(response => response.json())
-			.then(response =>{
-				localStorageCreate.push(response)
-				console.log(response.id);
-				const responseId = response.id;
-				// getPost(responseId)
-			})
-			}
-//--------------------------
-
-//get post fetch
-			// function getPost (id= 0) {
-			// 	let token = 'a3a8260f-7ba5-4cb2-9c25-c4e532982d51';
-			// 	return	fetch("https://ajax.test-danit.com/api/v2/" + id, {
-			// 	method: 'GET',
-			// 	headers: {
-			// 	'Authorization': `Bearer ${token}`
-			// 	},
-			// })
-			// // .then((response) => {
-			// // 	return response.json();
-			// // })
-			// .then((response)=> console.log(response))
-			// }
-
-
-
-
-// get post axios---------------------11
-			function getPost(id) {
-
-				
-				return  axios({
-					method: "get",
-					url:"https://ajax.test-danit.com/api/v2/cards/" + id,
-					headers: {
-						 "Content-Type": "application/json",
-						 'Authorization': `Bearer ${token}`
-					}
-			  })
-			  .then(({
-					data
-					
-			  }) => {
-					
-				
-					console.log(data);
-					
-					// createResponseCard(data);
-			  })
-			  
-	}
-//----------------
+			$formHTML.find('.close').on('click', function(e){
+				e.preventDefault();
+				$doctorDropDawn.val('');
+				$formHTML.remove();
+			});
 			
 			$doctorFormContainer.html($formHTML);
 		} else {
@@ -174,105 +105,118 @@ console.log(visitObject);
 
 const cardVisit = document.getElementById ('cart-visit');
 
-
-
 export default function createResponseCard(data) {
+	for (let i = 0; i < data.length; i++) {
+		let dataKey = data[i];
 
-		data.forEach(element => {
-			const responseBox = document.createElement('ul'); 
-			const cardBtnClose = document.createElement("a");
-			const cardbtnShowMore = document.createElement('button');
-			const cardbtnEdit = document.createElement('button');
-			const cardImg = document.createElement('img');
-
-			const cardOpenDone = document.createElement('select');
-			const cardOpen = document.createElement('option');
-			const cardDone = document.createElement('option');
-
-			cardOpenDone.setAttribute('name', 'open-done');
-			cardOpen.setAttribute('name', 'open');
-			cardOpen.setAttribute('value', 'open');
-			cardDone.setAttribute('name', 'done');
-			cardDone.setAttribute('value', 'done');
-			cardImg.setAttribute('src', 'https://andriikhomik.github.io/step_project_doctor-s_schedule_visits_deploy/img/therapist.f8bdaa5aca05139b9a8e.jpeg');
-
-
-			cardBtnClose.classList.add("card-btn-close");
-			cardbtnShowMore.classList.add("btn" , "card-btn-show-more");
-			cardbtnEdit.classList.add("btn")
-			cardOpenDone.classList.add("card-btn-open-done");
-			cardImg.classList.add("card-img");
-
+		const showMore =  "Show more";
+		const showLess =  "Show less";
 		
+		const responseBox = document.createElement('ul'); 
+		const cardbtnShowMore = document.createElement('button');
+		const cardbtnEdit = document.createElement('button');
+		const cardImg = document.createElement('img');
+		const cardBtnClose = document.createElement("a");
+		const cardOpenDone = document.createElement('select');
+		const cardOpen = document.createElement('option');
+		const cardDone = document.createElement('option');
+		const expandedClass = "expanded";
+		cardOpenDone.setAttribute('name', 'open-done');
+		cardOpen.setAttribute('name', 'open');
+		cardOpen.setAttribute('value', 'open');
+		cardDone.setAttribute('name', 'done');
+		cardDone.setAttribute('value', 'done');
 
-			cardbtnShowMore.textContent = "Show more";
-			cardbtnEdit.textContent = "Edit";
+		const imagePath = '/img/';
+		const src = imagePath + dataKey.doctor + '.jpeg';
 
-			cardOpen.textContent = "Open";
-			cardDone.textContent = "Done";
+		cardImg.setAttribute('src',src);
 
-			// doctorBtnClose.textContent = "x";
-			cardOpenDone.append(cardOpen, cardDone)
-			responseBox.append(cardBtnClose, cardOpenDone, cardImg)
+		cardbtnShowMore.classList.add("btn" , "card-btn-show-more");
+		cardbtnEdit.classList.add("btn")
+		cardOpenDone.classList.add("card-btn-open-done");
+		cardImg.classList.add("card-img");
+		cardBtnClose.classList.add("card-btn-close");
+
+		cardbtnShowMore.textContent = showMore;
+		cardbtnEdit.textContent = "Edit";
+
+		cardOpen.textContent = "Open";
+		cardDone.textContent = "Done";
+
+		cardOpenDone.append(cardOpen, cardDone)
+		responseBox.append(cardBtnClose, cardOpenDone, cardImg)
+		responseBox.classList.add("response-box")
+		
+		let j = 1;
+		for (let key in dataKey) {
+			if(key == 'id'){
+				continue;
+			}
 
 
-			responseBox.classList.add("response-box")
-
-
-			console.log(element);
-				// let v =  `<li class="response-item">${element} : ${element}</li>`;
-				// responseBox.insertAdjacentHTML('beforeend', v);
-			let dataPost = element.post;
-			// console.log(element.post);
-			// dataPost.forEach(elem => {
-			// 	let v =  `<li class="response-item">${elem} : ${elem}</li>`;
-			// 	responseBox.insertAdjacentHTML('beforeend', v);
-			// })
-
-			for(let key in dataPost) {
-				let v =  `<li class="response-item"><span class="response-item-text">${key} :</span> ${dataPost[key]}</li>`;
-				responseBox.insertAdjacentHTML('beforeend', v);
-			console.log(element.id);
-			// console.log(element.post);
-			// console.log(element.post );
-			
-			
-			// console.log(dataPost);			
-			// dataPost.forEach(elem => {
-				// let v =  `<li class="response-item">${elem} : ${elem}</li>`
-				// responseBox.insertAdjacentHTML('beforeend', v);
-			// } )
-			// console.log(`${key} :${value} `);
-			
-			
+			let expanClass = j > 2 ? "expan" : "";
+			let v =  `<li class="response-item${' ' + expanClass}"><span class="response-item-text">${key} :</span> ${dataKey[key]}</li>`;
+			responseBox.insertAdjacentHTML('beforeend', v);
+			j++;
 		}
-		responseBox.append( cardbtnShowMore, cardbtnEdit, element.id);
+
+		responseBox.append( cardbtnShowMore, cardbtnEdit, dataKey.id);
 		cardVisit.append (responseBox);
 
-		cardBtnClose.addEventListener("click", request.deletePost)
-	});
-		// cardVisit.append (responseBox);
-		// deleteReqestBtn(30952)
-		
-	}
+		cardBtnClose.addEventListener("click",	(e)=> {
+			let confirmation = confirm('dddd');
+			console.log("confirmation: ", confirmation);
+			if(confirmation){
+				request.deletePost(dataKey.id);
+				e.target.closest('.response-box').remove();
+			}
+		});
 
- function clearInputSerch(e, b) {
+		cardbtnShowMore.addEventListener("click", ()=> {
+			if (responseBox.className.indexOf(expandedClass) > -1){
+				responseBox.classList.remove(expandedClass);
+				cardbtnShowMore.textContent = showMore;
+				cardbtnShowMore.classList.remove('show-less')
+			} else {
+				responseBox.classList.add(expandedClass);
+				cardbtnShowMore.textContent = showLess;
+				cardbtnShowMore.classList.add('show-less')
+			}
+		})
+
+		cardbtnEdit.addEventListener("click", async () =>{
+			// console.log(dataKey.id, dataKey);
+			let datareqest = await request.getPost(dataKey.id);
+			// console.log(datareqest);
+			for(let key in datareqest) {
+				if(key == 'id'){
+					continue;
+				}
+				console.log(datareqest[key]);
+				// console.log(key);
+				let li = `<label for="${key}"></label><input id="${key}" value="${datareqest[key]}"/>`
+				responseBox.insertAdjacentHTML('beforeend',li);
+			}
+			
+			// request.editCard(dataKey.id, dataKey);
+			// console.log("edit")
+			// let input = '<input> </input>'
+		})
+	}
+};
+	
+function clearInputSearch(e, b) {
 	$("form")[0].reset();
-	console.log(b[2].value);
 	b[2].value = "";
 }
 // /delete reqest
+// deleteReqestBtn( 33612)
 function deleteReqestBtn(id) {
 	return  fetch(BASE_URL + '/' + id, {
-		            method: 'DELETE',
-		            headers: {
-		                'Authorization': `Bearer ${token}`
-		            },
-		        }).catch(e=>{
-				console.log(e.message);
-	})
+		method: 'DELETE',
+		headers: {
+			'Authorization': `Bearer ${token}`
+		},
+	}).catch(e=>{})
 }
-
-// console.log(createResponseCard);
-
-
