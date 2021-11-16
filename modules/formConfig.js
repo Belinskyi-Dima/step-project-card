@@ -2,7 +2,7 @@ export default
 {
 	"cardiologist": {
 		"id": "cardiologist-form",
-		"class": "cardiologist-form",
+		"class": "cardiologist-form form",
 		"fields":[
 		
 			{
@@ -64,26 +64,12 @@ export default
 				"id": "age",
 				"name":"age",
 				"label": "Age"
-			},
-			{
-				"type": "submit",
-				"id": "save",
-				"value": "save",
-				"name": "save",
-				"class": "btn"
-			},
-			{
-				"id": "close",
-				"type": "button",
-				"value": "close",
-				"name": "close",
-				"class": "btn close"
 			}
 		]
 	},
 	"dentist":{
 		"id": "dentist-form",
-		"class": "dentist-form",
+		"class": "dentist-form form",
 		"fields":[
 
 			{
@@ -129,23 +115,16 @@ export default
 				"label": "your age"
 			},
 			{
-				"type": "submit",
-				"id": "save",
-				"value": "save",
-				"name": "save",
-				"class": "btn"
-			},
-			{
-				"id": "close",
-				"type": "submit",
-				"value": "close",
-				"name": "close",
-				"class": "btn"
+				"type": "date",
+				"id": "last-vists",
+				"name":"lastvists",
+				"label": "last Vist"
 			}
+			
 		]
 	},"therapist":{
 		"id": "therapist-form",
-		"class": "therapist-form",
+		"class": "therapist-form form",
 		"fields":[
 			{
 				"type": "text",
@@ -188,20 +167,6 @@ export default
 				"id": "date-vists",
 				"name":"datevists",
 				"label": "date last Vist"
-			},
-			{
-				"id": "save",
-				"type": "submit",
-				"value": "save",
-				"name": "save",
-				"class": "btn"
-			},
-			{
-				"id": "close",
-				"type": "submit",
-				"value": "close",
-				"name": "close",
-				"class": "btn"
 			}
 		]
 	}

@@ -44,8 +44,7 @@ input {
 }
 .btn-login {
 }
-.btn-create-visit {
-}
+
 .btn-hiden{
 	display: none;
 }
@@ -60,6 +59,7 @@ input {
 	padding-top:  15px;
 	
 }
+
 .box-filter-input {
 	width: 100%;
 	border-radius: 10px;
@@ -97,28 +97,51 @@ textarea {
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	width: 100%;
 }
-form {
+.form {
+	position: relative;
 	margin: 0 auto;
 	background: rgb(195, 226, 220);
-width: 600px;
-padding: 30px;
-text-transform: uppercase;
-border-bottom: 1px solid #e1e8ed;
-box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.21);
+	width: 600px;
+	text-transform: uppercase;
+	padding: 30px;
+	/* box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.21); */
+	border-radius: 20px;
+	border: 3px solid #75abdf;
+	/* border-bottom: 1px solid #e1e8ed; */
 /* border-left: 1px solid #e1e8ed;
 border-right: 1px solid #e1e8ed; */
 
 }
+/* #close {
+	position: absolute;
+} */
+.form-div-btn-close {
+	position: absolute;
+	
+	/* display: inline-block; */
+	height: 30px;
+	width: 30px;
+	background-image: url(./img/Delete-80_icon-icons.com_57340.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	cursor: pointer;
+	right: 15px;
+	top: 9px;
+}
+.form-btn-close {
 
-form div {
+
+}
+.form-div-item {
 	padding: 5px;
 	margin-bottom: 15px;
 }
 
-form .div .label {
+/* form .div .label {
 	display: block;
 	margin-bottom: 0.25rem;
-}
+} */
 #priority {
 	
 font-family: sans-serif; 
@@ -204,6 +227,17 @@ background-color: #fff;
 	/* letter-spacing: 1px; */
 	padding: 8px;
 }
+.response-box-done {
+	/* background-color: rgba(158,179,206,.4); */
+	background: linear-gradient(90deg, rgba(123,126,133,0.6222864145658263) 0%, rgba(152,152,163,1) 96%);
+	/* background: linear-gradient(90deg, rgba(123,126,133,0.6222864145658263) 0%, rgba(152,152,163,1) 96%); */
+	opacity: 0.7;
+} 
+.response-box-done .card-img {
+	/* color: 	rgba(47, 87, 138, 0.4); */
+
+	
+}
 .response-item {
 	margin-bottom: 5px;
 }
@@ -240,6 +274,9 @@ background-color: #fff;
 .card-btn-edit {
 
 }
+.card-btn-edit-disabled{
+	background: rgba(85, 123, 220, 0.878);
+}
 .card-btn-open-done {
 	background-position: center right;
 	background-repeat: no-repeat;
@@ -269,8 +306,19 @@ background-color: #fff;
 	margin-bottom: 15px;
 	border: 2px solid rgb(154, 169, 221);
 }
+.card-img .card-img-disabled {
+	/* background: linear-gradient(90deg, rgba(123,123,133,1) 0%, rgba(152,152,163,1) 96%, rgba(0,212,255,1) 100%);
+	background: linear-gradient(90deg, rgba(123,123,133,1) 0%, rgba(152,152,163,1) 96%, rgba(0,212,255,1) 100%); */
+	/* background-color:rgba(0,0,0,.3); */
+	height:100%;
+	position:fixed;
+	width:100%;
+	top:0;
+	left:0;
+}
+	
 .response-item-text {
-	color: cornflowerblue;
+	color: rgb(74, 113, 184);
 	letter-spacing: 1px;
 }
 /* .expan {
@@ -278,4 +326,7 @@ background-color: #fff;
 } */
 .show-less {
 	background-image: url('./img/north-arrow-235.png');
+}
+.btn-create-visit {
+	width: 150px;
 }
