@@ -1,10 +1,6 @@
 import formConfig from "./formConfig.js";
-import Request from "./requestApi.js";
-import createResponseCard from "./VisitCard.js"
 
-let cardsContainer = document.getElementById('cart-visit');
-
-export {FormField, Form} ;
+export {FormField, Form, getFormValues} ;
  class FormField {
 	constructor(fieldObject, formClass) {
 	
@@ -48,6 +44,7 @@ export {FormField, Form} ;
 
 		if (this.label){
 			label = document.createElement('label');
+			label.classList.add("label-input")
 			label.innerText = `${this.label}: `
 		}
 
@@ -105,89 +102,56 @@ export {FormField, Form} ;
 class Form {
 	constructor(formType, values) {
 		let formObject = formConfig[formType];
-		
+		let submit = false;
+
 		this.id = formObject.id;
 		this.class = formObject.class;
 		this.fields = formObject.fields;
 		this.values = values;
-	}
 
-	get(action, visitID, doctor){
-		let fieldsHTML = '';
-		let fields = this.fields;
 		let form = document.createElement('form');
 		form.setAttribute('id', this.id);
 		form.setAttribute('class', this.class);
 
-		for (let i = 0; i < fields.length; i++){
-			let fieldObject = fields[i];
+		for (let i = 0; i < this.fields.length; i++){
+			let fieldObject = this.fields[i];
 			if(this.values){
 				fieldObject.value = this.values[fieldObject.name] || "";
 			}
 			let field = new FormField(fieldObject, this.class);
 			let fieldElement = field.get();
 			form.appendChild(fieldElement);
+			if(fieldObject.type == "submit"){
+				submit = true;
+			}
 		}
 
-		let saveBtn = document.createElement('input');
-		saveBtn.setAttribute('id', 'save');
-		saveBtn.setAttribute('name', 'save');
-		saveBtn.setAttribute('value', 'save');
-		saveBtn.setAttribute('type', 'submit');
-		saveBtn.classList.add('btn');
-		form.appendChild(saveBtn);
+		if(!submit){
+			let saveBtn = document.createElement('input');
+			saveBtn.setAttribute('id', 'save');
+			saveBtn.setAttribute('name', 'save');
+			saveBtn.setAttribute('value', 'save');
+			saveBtn.setAttribute('type', 'submit');
+			saveBtn.classList.add('btn');
+			form.appendChild(saveBtn);
+		}
 
-		let divBtnFormClose = document.createElement('div');
-		// let closeBtn = document.createElement('a');
+		this.form = form;
 
-		divBtnFormClose.classList.add('form-div-btn-close');
-
-		divBtnFormClose.setAttribute('id', 'close');
-		// divBtnFormClose.classList.add('form-btn-close');
-		// divBtnFormClose.textContent = '';
-		// divBtnFormClose.appendChild(closeBtn);
-		form.insertAdjacentElement("afterbegin", divBtnFormClose);
-
-		form.addEventListener('submit', (e) => {
-			e.preventDefault();
-			let formData = Object.values(e.target).reduce((obj,field) => {
-				if(field.name != 'save'){
-					obj[field.name] = field.value;
-				}
-				return obj 
-			}, {});
-
-			const request = new Request();
-			if(action == 'create'){
-				formData.doctor = document.getElementById('doctor').value;
-				request.creatPost(formData).then((response)=>{
-					let responseBox = createResponseCard(response);
-					cardsContainer.append (responseBox);
-					this.close(form);
-				});
-			} else if ('edit'){
-				formData.doctor = doctor;
-				request.editCard(visitID, formData).then((response)=>{
-					let newResponseBox = createResponseCard(response);
-					let oldResponseBox = document.getElementById(visitID);
-					oldResponseBox.replaceWith(newResponseBox);
-					// createResponseCard([response]);
-					this.close(form);
-				});
-			}
-		});
-
-		divBtnFormClose.addEventListener('click', (e) => {
-			e.preventDefault();
-			this.close(form);
-		});
-
-		return form;
+		return this.form;
 	}
 
-	close(form){
-		let selectDoctorContainer = document.querySelector('.select-doctor-container');
-		selectDoctorContainer.innerHTML = '';
-		form.remove();
+	getValues(){
+
 	}
+}
+
+function getFormValues(form){
+	let formData = Object.values(form).reduce((obj,field) => {
+		if(field.name != 'save'){
+			obj[field.name] = field.value;
+		}
+		return obj 
+	}, {});
+	return formData;
 }

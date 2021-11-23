@@ -7,7 +7,6 @@ export default class Doctor {
 			"id": "doctor",
 			"class": "doctor-select",
 			"name":"doctor",
-			"label": "create Visit",
 			"options": [{
 				"text":"- Please select a doctor -",
 				"value":""
@@ -30,19 +29,18 @@ export default class Doctor {
 		}
 
 		let selectDoctor = new FormField(dropDownSettings);
-
-		let doctorFormContainer = document.querySelector('.doctor-form-container');
 		let createVisit = selectDoctor.get();
 	
 		selectDoctor.fieldElement.addEventListener("change", (e)=>{
 			e.preventDefault();
 			let value = e.target.value;
+			let doctorFormContainer = document.querySelector('.doctor-form-container');
+
 			if (value){
 				let form = new Form(value);
-				let formElement = form.get('create');
 	
 				doctorFormContainer.innerHTML = '';
-				doctorFormContainer.appendChild(formElement);
+				doctorFormContainer.appendChild(form);
 			} else {
 				doctorFormContainer.innerHTML = '';
 			}

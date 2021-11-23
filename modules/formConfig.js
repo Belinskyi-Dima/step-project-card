@@ -1,24 +1,79 @@
 export default
 {
+	"search":{
+		"id": "search-form",
+		"class": "seach box-filter-form",
+		"fields": [
+			{
+				"type": "text",
+				"id": "search-visit",
+				"name":"q",
+				"label": "Seacrh visit"
+			},
+			{
+				"type": "select",
+				"id": "status",
+				"name":"status",
+				"label": "Status",
+				"options": [{
+					"text":"- Please select status -",
+					"value":""
+				},{
+					"text":"Open", 
+					"value":"open"
+				},
+				{
+					"text":"Done", 
+					"value":"done"
+				}]
+			},
+			{
+				"type": "select",
+				"id": "priority",
+				"name":"priority",
+				"label": "Priority",
+				"options": [{
+					"text":"- Please select priority -",
+					"value":""
+				},{
+					"text":"Minor", 
+					"value":"3"
+				},
+				{
+					"text":"Major", 
+					"value":"2"
+				},
+				{
+					"text":"Critical", 
+					"value":"1"
+				}]
+			},{
+				"type": "submit",
+				"id": "search",
+				"name":"search",
+				"class": "btn",
+				"value": "Search"
+			}
+		]
+	},
 	"cardiologist": {
 		"id": "cardiologist-form",
 		"class": "cardiologist-form form",
 		"fields":[
-		
 			{
 				"type": "text",
 				"id": "full-name",
-				"name":"fullname",
+				"name":"full-name",
 				"label": "Full name"
 			},
 			{
-				"type": "textArea",
+				"type": "text",
 				"id": "visit-goal",
-				"name":"visitgoal",
+				"name":"visit-goal",
 				"label": "Visit goal"
 			},
 			{
-				"type": "textArea",
+				"type": "text",
 				"id": "short-description",
 				"name":"short-description",
 				"label": "Short description"
@@ -54,7 +109,7 @@ export default
 				"label": "Mass index"
 			},
 			{
-				"type": "textArea",
+				"type": "text",
 				"id": "past-diseases",
 				"name":"pastdiseases",
 				"label": "Past diseases"
@@ -75,17 +130,17 @@ export default
 			{
 				"type": "text",
 				"id": "full-name",
-				"name":"fullname",
+				"name":"full-name",
 				"label": "Full name"
 			},
 			{
-				"type": "textArea",
+				"type": "text",
 				"id": "visit-goal",
-				"name":"visitgoal",
+				"name":"visit-goal",
 				"label": "Visit goal"
 			},
 			{
-				"type": "textArea",
+				"type": "text",
 				"id": "short-description",
 				"name":"short-description",
 				"label": "Short description"
@@ -129,17 +184,17 @@ export default
 			{
 				"type": "text",
 				"id": "full-name",
-				"name":"fullname",
+				"name":"full-name",
 				"label": "Full name"
 			},
 			{
-				"type": "textArea",
+				"type": "text",
 				"id": "visit-goal",
-				"name":"visitgoal",
+				"name":"visit-goal",
 				"label": "Visit goal"
 			},
 			{
-				"type": "textArea",
+				"type": "texttextArea",
 				"id": "short-description",
 				"name":"short-description",
 				"label": "Short description"
@@ -161,6 +216,12 @@ export default
 					"text":"Critical", 
 					"value":"1"
 				}]
+			},
+			{
+				"type": "number",
+				"id": "age",
+				"name":"age",
+				"label": "your age"
 			},
 			{
 				"type": "date",

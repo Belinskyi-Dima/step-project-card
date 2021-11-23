@@ -1,5 +1,6 @@
 import Request from "./requestApi.js";
-import {Form} from "./FormModel.js";
+import {Form, getFormValues} from "./FormModel.js";
+import Modal from "./Modal.js";
 
 export default function createResponseCard(data) {
 	const request = new Request();
@@ -50,7 +51,7 @@ export default function createResponseCard(data) {
 		}
 
 		let expanClass = j > 2 ? "expan" : "";
-		let v =  `<li class="response-item${' ' + expanClass}"><span class="response-item-text">${key} :</span> ${data[key]}</li>`;
+		let v =  `<li data-name="${key}" data-value="${data[key]}" class="response-item${' ' + expanClass}"><span class="response-item-text">${key} :</span> ${data[key]}</li>`;
 		responseBox.insertAdjacentHTML('beforeend', v);
 		j++;
 	}
@@ -84,11 +85,31 @@ export default function createResponseCard(data) {
 		request.getPost(data.id).then((datarequest) =>{
 			
 			let form = new Form(datarequest.doctor, datarequest);
-			let formElement = form.get('edit', data.id, data.doctor);
 
-			let doctorFormContainer = document.querySelector('.doctor-form-container');
-			doctorFormContainer.innerHTML = '';
-			doctorFormContainer.appendChild(formElement);
+			let visitCardWrapper = document.createElement('div');
+			visitCardWrapper.classList.add('visit-wrapper');
+	
+			let doctorFormContainer = document.createElement('div');
+			doctorFormContainer.classList.add('doctor-form-container');
+			doctorFormContainer.appendChild(form);
+	
+			visitCardWrapper.append(doctorFormContainer);
+	
+			let modal = new Modal('Edit visit', visitCardWrapper);
+			
+			modal.open();
+			modal.bodyElement.addEventListener('submit', (e)=>{
+				e.preventDefault();
+				let formData = getFormValues(e.target);
+
+				formData.doctor = data.doctor;
+				request.editCard(data.id, formData).then((response)=>{
+					let newResponseBox = createResponseCard(response);
+					let oldResponseBox = document.getElementById(data.id);
+					oldResponseBox.replaceWith(newResponseBox);
+					modal.close();
+				});
+			});
 		});
 	});
 
@@ -109,8 +130,8 @@ export default function createResponseCard(data) {
 			
 			
 		}
+		
 	});
-	
 
 	return responseBox;
 };
