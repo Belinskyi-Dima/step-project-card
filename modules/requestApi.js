@@ -1,5 +1,5 @@
 const BASE_URL ="https://ajax.test-danit.com/api/v2";
-const token = 'a3a8260f-7ba5-4cb2-9c25-c4e532982d51';
+const token = "3635d84e-1128-4a99-9651-3bd5bb74f626"; // '3635d84e-1128-4a99-9651-3bd5bb74f626'; // a3a8260f-7ba5-4cb2-9c25-c4e532982d51
 export default class Request {
 	constructor (url,id) {
 		this.url = url;
@@ -69,9 +69,28 @@ export default class Request {
 			},
 			data: JSON.stringify(data)
 		}).then(({data}) => {
-			console.log(data);
 			return data;
 		});
 	}
 
+	login(email, password) {
+		return axios(BASE_URL + "/cards/login", {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			  'Authorization': `Bearer ${token}`
+			},
+			data: { email: email, password: password }
+		 })
+			.then((response) => {
+				console.log(response);
+				return response;
+			}).catch((error) => {
+				return {
+					error: true
+				};
+			 });
+				
+			// .then(token => console.log(token))
+	}
 }

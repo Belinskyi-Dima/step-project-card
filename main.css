@@ -60,6 +60,7 @@ input {
 .box-filter-form {
 	display: flex;
 	padding-top:  15px;
+	justify-content: space-between;
 }
 
 .box-filter-input {
@@ -67,10 +68,22 @@ input {
 	border-radius: 10px;
 	margin: 5px 10px;
 }
-.search-visit {
-	/* line-height: 45px; */
-	width: 380px;
+.search-select {
+	border: 2px solid #006196;
+	border-radius: 10px;
+	height: 40px;
+	margin-left: 4px;
+	color: #444; 
+	font-weight: 700; 
+	box-shadow: 0 1px 0 1px rgba(0,0,0,.04); 
 }
+.box-filter-btnsearch {
+	display: block;
+	margin-top: 23px;
+
+	
+}
+
 #cart-visit {
 	position: relative;
 
@@ -154,20 +167,7 @@ border-right: 1px solid #e1e8ed; */
 	display: block;
 	margin-bottom: 0.25rem;
 } */
-#priority {
-	
-font-family: sans-serif; 
-font-weight: 700; 
-color: #444; 
 
-padding: .6em 1.4em .5em .8em;
-box-sizing: border-box; 
-margin: 0; 
-border: 1px solid #aaa;
- box-shadow: 0 1px 0 1px rgba(0,0,0,.04); 
-border-radius: .5em;
- background-color: #fff;
-}
 .undefined__priority {
 	height: 30px;
 	margin-left: 20px;
@@ -311,6 +311,7 @@ background-color: #fff;
 	/* text-overflow: ellipsis; */
 	/* white-space: nowrap; */
 }
+
 .card-img {
 	width: 230px;
 	height: 232px;

@@ -1,5 +1,32 @@
 export default
 {
+	"login":{
+		"id": "login-form",
+		"class": "login",
+		"fields": [{
+			"type": "email",
+			"id": "email",
+			"name":"email",
+			"placeholder": "Type your email",
+			"class": "email",
+			"label": "Email"
+		},
+		{
+			"type": "password",
+			"id": "password",
+			"name":"password",
+			"placeholder": "Type your password",
+			"class": "password",
+			"label": "Password"
+		},
+		{
+			"type": "submit",
+			"id": "login-submit",
+			"name":"login",
+			"class": "btn",
+			"value": "Login"
+		}]
+	},
 	"search":{
 		"id": "search-form",
 		"class": "seach box-filter-form",
@@ -8,6 +35,8 @@ export default
 				"type": "text",
 				"id": "search-visit",
 				"name":"q",
+				"placeholder": "Type to search visit",
+				"class": "box-filter-input search-visit",
 				"label": "Seacrh visit"
 			},
 			{
@@ -15,6 +44,7 @@ export default
 				"id": "status",
 				"name":"status",
 				"label": "Status",
+				"class":"box-filter-input search-select search-all-done",
 				"options": [{
 					"text":"- Please select status -",
 					"value":""
@@ -32,6 +62,7 @@ export default
 				"id": "priority",
 				"name":"priority",
 				"label": "Priority",
+				"class":"box-filter-input search-select serch-priority",
 				"options": [{
 					"text":"- Please select priority -",
 					"value":""
@@ -51,7 +82,7 @@ export default
 				"type": "submit",
 				"id": "search",
 				"name":"search",
-				"class": "btn",
+				"class": "btn box-filter-btnsearch",
 				"value": "Search"
 			}
 		]

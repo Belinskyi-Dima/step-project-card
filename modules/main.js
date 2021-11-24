@@ -76,12 +76,14 @@ window.onload = function(){
 
 	});
 
+	
+
+
 	const createVisit = document.getElementById('create-visit');
 	createVisit.addEventListener('click', (e)=>{
 		e.preventDefault();
 		let visitCardWrapper = document.createElement('div');
 		visitCardWrapper.classList.add('visit-wrapper');
-
 
 		let doctor = new DoctorDropDown();
 		let selectDoctorContainer = document.createElement('div');
@@ -99,7 +101,6 @@ window.onload = function(){
 		modal.bodyElement.addEventListener('submit', (e)=>{
 			e.preventDefault();
 			let formData = getFormValues(e.target);
-
 			const request = new Request();
 			formData.doctor = document.getElementById('doctor').value;
 			request.creatPost(formData).then((response)=>{
@@ -109,6 +110,34 @@ window.onload = function(){
 			});
 		});
 	});
+
+
+	const btnLogin = document.getElementById('btn-login')
+	btnLogin.addEventListener('click',(e)=> {
+		e.preventDefault();
+		let loginModal = document.createElement('div');
+		loginModal.classList.add('visit-wrapper');
+		
+		
+
+		let loginForm = new Form('login');
+		let loginFormContainer = document.createElement('div');
+		loginFormContainer.classList.add('login-container');
+		loginFormContainer.appendChild(loginForm);
+		let modal = new Modal('Please login', loginFormContainer);
+		modal.open();
+		loginForm.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			let formData = getFormValues(e.target);
+			const request = new Request();
+			const loginRequest = new Request();
+			loginRequest.login(formData.email, formData.password).then((response)=>{
+				console.log("Login: ", response);
+			});
+			
+		})
+		// selectDoctorContainer.appendChild(doctor);
+	})
 
 	// const inputSearch = document.querySelector(".search-visit");
 	// const inputSearchAll = document.querySelector(".search-all-done");
