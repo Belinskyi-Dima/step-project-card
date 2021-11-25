@@ -1,5 +1,7 @@
+import { getCookie } from './Cookies.js';
+
 const BASE_URL ="https://ajax.test-danit.com/api/v2";
-const token = "3635d84e-1128-4a99-9651-3bd5bb74f626"; // '3635d84e-1128-4a99-9651-3bd5bb74f626'; // a3a8260f-7ba5-4cb2-9c25-c4e532982d51
+// const token = "3635d84e-1128-4a99-9651-3bd5bb74f626"; // '3635d84e-1128-4a99-9651-3bd5bb74f626'; // a3a8260f-7ba5-4cb2-9c25-c4e532982d51
 export default class Request {
 	constructor (url,id) {
 		this.url = url;
@@ -7,6 +9,7 @@ export default class Request {
 	}
 
 	creatPost(post) {
+		let token = getCookie('token');
 		return fetch( BASE_URL + "/cards", {
 				method: 'POST',
 				headers: {
@@ -23,6 +26,7 @@ export default class Request {
 	}
 
 	getPosts() {
+		let token = getCookie('token');
 		return axios({
 			method: "get",
 			url:"https://ajax.test-danit.com/api/v2/cards",
@@ -37,6 +41,7 @@ export default class Request {
 	}
 
 	getPost(id) {
+		let token = getCookie('token');
 		return axios({
 			method: "GET",
 			url: BASE_URL + '/cards/' + id,
@@ -51,6 +56,7 @@ export default class Request {
 	}
 
 	deletePost(id) {
+		let token = getCookie('token');
 		return axios(BASE_URL + '/cards/' + id, {
 			method: 'DELETE',
 			headers: {
@@ -61,6 +67,7 @@ export default class Request {
 
 
 	editCard(id, data) {
+		let token = getCookie('token');
 		return axios(BASE_URL + '/cards/' + id, {
 			method: 'PUT',
 			headers: {
@@ -77,20 +84,25 @@ export default class Request {
 		return axios(BASE_URL + "/cards/login", {
 			method: 'POST',
 			headers: {
-			  'Content-Type': 'application/json',
-			  'Authorization': `Bearer ${token}`
+			  'Content-Type': 'application/json'
 			},
 			data: { email: email, password: password }
 		 })
 			.then((response) => {
-				console.log(response);
-				return response;
+				let responseObj = {
+					status: response.status,
+					data: response.data
+				}
+
+				return responseObj;
 			}).catch((error) => {
-				return {
-					error: true
-				};
+				let responseObj = {
+					error: true,
+					status: error.response.status,
+					data: error.response.data
+				}
+
+				return responseObj;
 			 });
-				
-			// .then(token => console.log(token))
 	}
 }

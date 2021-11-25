@@ -3,13 +3,117 @@ import createResponseCard from "./VisitCard.js";
 import Request from "./requestApi.js";
 import Modal from "./Modal.js";
 import { Form , getFormValues} from './FormModel.js';
+import { setCookie, getCookie, deleteCookie } from './Cookies.js';
 
-const BASE_URL ="https://ajax.test-danit.com/api/v2/cards";
-const token = 'a3a8260f-7ba5-4cb2-9c25-c4e532982d51';
+function isLoggedIn() {
+	return !!getCookie('token');
+}
 
-window.onload = function(){
-	const request = new Request();
-	let cardsContainer = document.getElementById('cart-visit');
+function loadHeaderActions(){
+	const headerActions = document.getElementById('header-actions');
+	headerActions.innerHTML = '';
+
+	if(isLoggedIn()){
+		let logoutBtn = document.createElement('button');
+		logoutBtn.textContent = 'logout';
+		logoutBtn.classList.add('btn', 'btn-login');
+
+		let createVisitBtn = document.createElement('button');
+		createVisitBtn.textContent = 'Add new visit';
+		createVisitBtn.classList.add('btn', 'btn-create-visit');
+
+		headerActions.append(logoutBtn, createVisitBtn);
+
+		logoutBtn.addEventListener('click', (e)=>{
+			e.preventDefault();
+			deleteCookie('token');
+			loadHeaderActions();
+			loadVisits();
+		});
+
+		createVisitBtn.addEventListener('click', (e)=>{
+			e.preventDefault();
+	
+			let visitCardWrapper = document.createElement('div');
+			visitCardWrapper.classList.add('visit-wrapper');
+	
+			let doctor = new DoctorDropDown();
+			let selectDoctorContainer = document.createElement('div');
+			selectDoctorContainer.classList.add('select-doctor-container');
+			selectDoctorContainer.appendChild(doctor);
+	
+			let doctorFormContainer = document.createElement('div');
+			doctorFormContainer.classList.add('doctor-form-container');
+	
+			visitCardWrapper.append(selectDoctorContainer, doctorFormContainer);
+	
+			let modal = new Modal('Create visit', visitCardWrapper);
+			
+			modal.open();
+			modal.bodyElement.addEventListener('submit', (e)=>{
+				e.preventDefault();
+				let formData = getFormValues(e.target);
+				const request = new Request();
+				formData.doctor = document.getElementById('doctor').value;
+				request.creatPost(formData).then((response)=>{
+					let responseBox = createResponseCard(response);
+					let cardsContainer = document.getElementById('cart-visit');
+					cardsContainer.append (responseBox);
+					modal.close();
+				});
+			});
+		});
+	} else {
+		let loginBtn = document.createElement('button');
+		loginBtn.textContent = 'login';
+		loginBtn.classList.add('btn', 'btn-login');
+
+		headerActions.append(loginBtn);
+
+		loginBtn.addEventListener('click',(e)=> {
+			e.preventDefault();
+			let loginModal = document.createElement('div');
+			loginModal.classList.add('visit-wrapper');
+			let loginForm = new Form('login');
+			let loginFormContainer = document.createElement('div');
+			loginFormContainer.classList.add('login-container');
+			loginFormContainer.appendChild(loginForm);
+			let modal = new Modal('Please login', loginFormContainer);
+			modal.open();
+			loginForm.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				let formData = getFormValues(e.target);
+				const request = new Request();
+				const loginRequest = new Request();
+				loginRequest.login(formData.email, formData.password).then((response)=>{
+					if(!response.error){
+						let token = response.data;
+						setCookie('token', token, 60);
+						modal.close();
+						loadHeaderActions();
+						loadVisits();
+					} else {
+						let errorMessage = response.data;
+						let errorElement = document.getElementById('login-error');
+						if(!errorElement){
+							errorElement= document.createElement('span');
+							errorElement.id = 'login-error';
+							errorElement.classList.add('error');
+							loginFormContainer.prepend(errorElement);
+						} else {
+							errorElement.textContent = errorMessage;
+						}
+						
+
+					}
+				});
+				
+			});
+		});
+	}
+}
+
+function loadSearchPanel(){
 	let searchFormContainer = document.querySelector('.box-filter');
 	let searchForm = new Form("search");
 	searchForm.addEventListener('submit', (e)=>{
@@ -27,7 +131,6 @@ window.onload = function(){
 				continue;
 			}
 
-			console.log(attributes);
 			for (let j = 0; j < attributes.length; j++){
 				let attribute = attributes[j];
 
@@ -65,88 +168,28 @@ window.onload = function(){
 	});
 
 	searchFormContainer.appendChild(searchForm);
+}
 
-	request.getPosts().then((data)=>{
+function loadVisits(){
+	let cardsContainer = document.getElementById('cart-visit');
+	cardsContainer.innerHTML = '';
 
-		for (let i = 0; i < data.length; i++){
-			let dataObject = data[i];
-			let responseBox = createResponseCard(dataObject);
-			cardsContainer.append(responseBox);
-		}
-
-	});
-
-	
-
-
-	const createVisit = document.getElementById('create-visit');
-	createVisit.addEventListener('click', (e)=>{
-		e.preventDefault();
-		let visitCardWrapper = document.createElement('div');
-		visitCardWrapper.classList.add('visit-wrapper');
-
-		let doctor = new DoctorDropDown();
-		let selectDoctorContainer = document.createElement('div');
-		selectDoctorContainer.classList.add('select-doctor-container');
-		selectDoctorContainer.appendChild(doctor);
-
-		let doctorFormContainer = document.createElement('div');
-		doctorFormContainer.classList.add('doctor-form-container');
-
-		visitCardWrapper.append(selectDoctorContainer, doctorFormContainer);
-
-		let modal = new Modal('Create visit', visitCardWrapper);
-		
-		modal.open();
-		modal.bodyElement.addEventListener('submit', (e)=>{
-			e.preventDefault();
-			let formData = getFormValues(e.target);
-			const request = new Request();
-			formData.doctor = document.getElementById('doctor').value;
-			request.creatPost(formData).then((response)=>{
-				let responseBox = createResponseCard(response);
-				cardsContainer.append (responseBox);
-				modal.close();
-			});
+	if (isLoggedIn()){
+		const request = new Request();
+		request.getPosts().then((data)=>{
+			for (let i = 0; i < data.length; i++){
+				let dataObject = data[i];
+				let responseBox = createResponseCard(dataObject);
+				cardsContainer.append(responseBox);
+			}
 		});
-	});
+	} else {
+		cardsContainer.textContent = 'No visits';
+	}
+}
 
-
-	const btnLogin = document.getElementById('btn-login')
-	btnLogin.addEventListener('click',(e)=> {
-		e.preventDefault();
-		let loginModal = document.createElement('div');
-		loginModal.classList.add('visit-wrapper');
-		
-		
-
-		let loginForm = new Form('login');
-		let loginFormContainer = document.createElement('div');
-		loginFormContainer.classList.add('login-container');
-		loginFormContainer.appendChild(loginForm);
-		let modal = new Modal('Please login', loginFormContainer);
-		modal.open();
-		loginForm.addEventListener('submit', async (e) => {
-			e.preventDefault();
-			let formData = getFormValues(e.target);
-			const request = new Request();
-			const loginRequest = new Request();
-			loginRequest.login(formData.email, formData.password).then((response)=>{
-				console.log("Login: ", response);
-			});
-			
-		})
-		// selectDoctorContainer.appendChild(doctor);
-	})
-
-	// const inputSearch = document.querySelector(".search-visit");
-	// const inputSearchAll = document.querySelector(".search-all-done");
-	// const inputSearchPriority = document.querySelector(".serch-priority");
-	// const btnSearchFilter = document.querySelector('.box-filter-btnsearch');
-
-	// btnSearchFilter.addEventListener("click", (e) => {
-	// 	e.preventDefault()
-	// 	let d = inputSearch.e.target.value
-	// 	console.log(d)
-	// })
+window.onload = function(){
+	loadHeaderActions();
+	loadSearchPanel();
+	loadVisits();
 }
