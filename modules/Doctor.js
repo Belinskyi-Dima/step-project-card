@@ -1,5 +1,11 @@
-import {FormField, Form} from './FormModel.js'
+import Field from "./Field.js";
+import { Form } from "./Form.js";
 
+/**
+ * Doctor class used for generating a <select> dropdown with 3 doctors as an options (Cardiologist, Dentist, Therapist)
+ * @param {String} value - to preselect the doctor option
+ * @returns {Object} - <select><options></options></select> DOM elemenet
+ */
 export default class Doctor {
 	constructor(value) {
 		let dropDownSettings = {
@@ -28,17 +34,16 @@ export default class Doctor {
 			dropDownSettings.value = value;
 		}
 
-		let selectDoctor = new FormField(dropDownSettings);
-		let createVisit = selectDoctor.get();
+		let selectDoctorFieldObject = new Field(dropDownSettings);
+		let createVisit = selectDoctorFieldObject.field;
 	
-		selectDoctor.fieldElement.addEventListener("change", (e)=>{
+		createVisit.addEventListener("change", (e)=>{
 			e.preventDefault();
 			let value = e.target.value;
 			let doctorFormContainer = document.querySelector('.doctor-form-container');
 
 			if (value){
 				let form = new Form(value);
-	
 				doctorFormContainer.innerHTML = '';
 				doctorFormContainer.appendChild(form);
 			} else {

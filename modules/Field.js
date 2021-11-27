@@ -1,7 +1,11 @@
-import formConfig from "./formConfig.js";
-
-export {FormField, Form, getFormValues} ;
- class FormField {
+/**
+ * FormField class for generating inputs/select/textarea HTML using JSON form config in formConfig.js
+ * @constructor
+ * @param {Object} fieldObject - the field object in formConfig.js 
+ * @param {String} formClass - The form class
+ * @returns {Object} with 2 attributes: field (contains the <input>, <select><options></options></select>, <textarea></textarea> DOM element), label (contains the <label> DOM element)
+ */
+ export default class FormField {
 	constructor(fieldObject, formClass) {
 	
 		this.id = fieldObject.id;
@@ -11,9 +15,12 @@ export {FormField, Form, getFormValues} ;
 		this.name = fieldObject.name;
 		this.options = fieldObject.options;
 		this.value = fieldObject.value || '';
+
+		this.field = this.getField();
+		this.label = this._getLabel();
 	}
 
-	get(){
+	getField(){
 		let element;
 		if(this.type == 'textArea'){
 			element = this._getTextArea();
@@ -27,18 +34,10 @@ export {FormField, Form, getFormValues} ;
 			element = this._getInputField();
 		}
 
-		let label = this._getLabel();
-
-		let div = document.createElement('div');
-		div.classList.add("form-div-item")
-		if(label){
-			div.appendChild(label);
-		}
-		div.appendChild(element);
-		this.fieldElement = element;
-		return div;
+		return element;
 	}
 
+	// Generates <label> DOM element
 	_getLabel(){
 		let label;
 
@@ -51,6 +50,7 @@ export {FormField, Form, getFormValues} ;
 		return label
 	}
 
+	// Generates <input> DOM element
 	_getInputField(){
 		let inputField = document.createElement('input');
 		inputField.setAttribute('id', this.id);
@@ -64,6 +64,7 @@ export {FormField, Form, getFormValues} ;
 		return inputField;
 	}
 
+	// Generates <textarea> DOM element
 	_getTextArea(){
 		let textArea = document.createElement('textarea');
 		textArea.setAttribute('id', this.id);
@@ -76,6 +77,7 @@ export {FormField, Form, getFormValues} ;
 		return textArea;
 	}
 
+	// Generates <select><options></options></select> DOM element
 	_getDropDown(){
 		let dropDown = document.createElement('select');
 		dropDown.setAttribute('id', this.id);
@@ -96,62 +98,4 @@ export {FormField, Form, getFormValues} ;
 
 		return dropDown;
 	}
-}
-
-
-class Form {
-	constructor(formType, values) {
-		let formObject = formConfig[formType];
-		let submit = false;
-
-		this.id = formObject.id;
-		this.class = formObject.class;
-		this.fields = formObject.fields;
-		this.values = values;
-
-		let form = document.createElement('form');
-		form.setAttribute('id', this.id);
-		form.setAttribute('class', this.class);
-
-		for (let i = 0; i < this.fields.length; i++){
-			let fieldObject = this.fields[i];
-			if(this.values){
-				fieldObject.value = this.values[fieldObject.name] || "";
-			}
-			let field = new FormField(fieldObject, this.class);
-			let fieldElement = field.get();
-			form.appendChild(fieldElement);
-			if(fieldObject.type == "submit"){
-				submit = true;
-			}
-		}
-
-		if(!submit){
-			let saveBtn = document.createElement('input');
-			saveBtn.setAttribute('id', 'save');
-			saveBtn.setAttribute('name', 'save');
-			saveBtn.setAttribute('value', 'save');
-			saveBtn.setAttribute('type', 'submit');
-			saveBtn.classList.add('btn');
-			form.appendChild(saveBtn);
-		}
-
-		this.form = form;
-
-		return this.form;
-	}
-
-	getValues(){
-
-	}
-}
-
-function getFormValues(form){
-	let formData = Object.values(form).reduce((obj,field) => {
-		if(field.name != 'save'){
-			obj[field.name] = field.value;
-		}
-		return obj 
-	}, {});
-	return formData;
 }

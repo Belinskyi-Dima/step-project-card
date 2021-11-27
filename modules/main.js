@@ -1,15 +1,16 @@
-import DoctorDropDown from './DoctorDropDown.js';
-import createResponseCard from "./VisitCard.js";
-import Request from "./requestApi.js";
+import DoctorDropDown from './Doctor.js';
+import Visit from "./Visit.js";
+import request from "./request.js";
 import Modal from "./Modal.js";
-import { Form , getFormValues} from './FormModel.js';
-import { setCookie, getCookie, deleteCookie } from './Cookies.js';
+import { Form , getFormValues } from './Form.js';
+import Cookies from './Cookies.js';
 
 function isLoggedIn() {
-	return !!getCookie('token');
+	return !!Cookies.get('token');
 }
 
 function loadHeaderActions(){
+	const userNameElement = document.getElementById('username');
 	const headerActions = document.getElementById('header-actions');
 	headerActions.innerHTML = '';
 
@@ -22,11 +23,15 @@ function loadHeaderActions(){
 		createVisitBtn.textContent = 'Add new visit';
 		createVisitBtn.classList.add('btn', 'btn-create-visit');
 
+		let userName = Cookies.get('username');
+		userNameElement.textContent = userName;
+
 		headerActions.append(logoutBtn, createVisitBtn);
 
 		logoutBtn.addEventListener('click', (e)=>{
 			e.preventDefault();
-			deleteCookie('token');
+			Cookies.remove('token');
+			Cookies.remove('username');
 			loadHeaderActions();
 			loadVisits();
 		});
@@ -50,15 +55,18 @@ function loadHeaderActions(){
 			let modal = new Modal('Create visit', visitCardWrapper);
 			
 			modal.open();
-			modal.bodyElement.addEventListener('submit', (e)=>{
+			modal.bodyWrapper.addEventListener('submit', e => {
 				e.preventDefault();
 				let formData = getFormValues(e.target);
-				const request = new Request();
 				formData.doctor = document.getElementById('doctor').value;
 				request.creatPost(formData).then((response)=>{
-					let responseBox = createResponseCard(response);
-					let cardsContainer = document.getElementById('cart-visit');
-					cardsContainer.append (responseBox);
+					let visitCard = new Visit(response);
+					let cardsContainer = document.getElementById('card-visit');
+					cardsContainer.append(visitCard);
+
+					let noCardsContainer = document.getElementById('no-cards'); 
+					noCardsContainer.classList.add('hidden');
+
 					modal.close();
 				});
 			});
@@ -68,6 +76,7 @@ function loadHeaderActions(){
 		loginBtn.textContent = 'login';
 		loginBtn.classList.add('btn', 'btn-login');
 
+		userNameElement.textContent = '';
 		headerActions.append(loginBtn);
 
 		loginBtn.addEventListener('click',(e)=> {
@@ -83,12 +92,11 @@ function loadHeaderActions(){
 			loginForm.addEventListener('submit', async (e) => {
 				e.preventDefault();
 				let formData = getFormValues(e.target);
-				const request = new Request();
-				const loginRequest = new Request();
-				loginRequest.login(formData.email, formData.password).then((response)=>{
+				request.login(formData.email, formData.password).then((response)=>{
 					if(!response.error){
 						let token = response.data;
-						setCookie('token', token, 60);
+						Cookies.set('token', token, 60);
+						Cookies.set('username', formData.email, 60);
 						modal.close();
 						loadHeaderActions();
 						loadVisits();
@@ -99,12 +107,11 @@ function loadHeaderActions(){
 							errorElement= document.createElement('span');
 							errorElement.id = 'login-error';
 							errorElement.classList.add('error');
+							errorElement.textContent = errorMessage;
 							loginFormContainer.prepend(errorElement);
 						} else {
 							errorElement.textContent = errorMessage;
 						}
-						
-
 					}
 				});
 				
@@ -119,40 +126,35 @@ function loadSearchPanel(){
 	searchForm.addEventListener('submit', (e)=>{
 		e.preventDefault();
 		let formData = getFormValues(e.target);
-		console.log(formData);
-		let cards = document.querySelectorAll('.response-box');
+		let cards = document.querySelectorAll('.visit-card-box');
 		for (let i = 0; i < cards.length; i++){
-			let found = false
+			let found = false;
 			let card = cards[i];
-			let attributes = card.querySelectorAll('.response-item')
+			// let attributes = card.querySelectorAll('.visit-card-item');
+
+			let cardData = JSON.parse(card.dataset.value);
+			console.log(cardData);
 
 			if(!formData.q && !formData.priority && !formData.status){
 				card.classList.remove('hidden');
 				continue;
 			}
 
-			for (let j = 0; j < attributes.length; j++){
-				let attribute = attributes[j];
+			for (let name in cardData){
+				let value =  cardData[name]
 
-				if(formData.priority){
-					console.log("formData.priority: ", formData.priority);
-					console.log("attribute.dataset.name: ", attribute.dataset.name);
-					console.log("attribute.dataset.value: ", attribute.dataset.value);
-				}
-
-				if(formData.priority && attribute.dataset.name == 'priority' && attribute.dataset.value == formData.priority){
-					console.log(123);
+;				if(formData.priority && name == 'priority' && value == formData.priority){
 					found = true;
 					break;
 				}
 
-				// if(formData.status && attribute.dataset.name == 'status' && attribute.dataset.value == formData.status){
-				// 	found = true;
-				// 	break;
-				// }
+				console.log('formData.status', formData.status, 'name: ', name, 'value: ', value);
+				if(formData.status && name == 'status' && value == formData.status){
+					found = true;
+					break;
+				}
 
-
-				if(formData.q && attribute.dataset.value.toLowerCase().indexOf(formData.q.toLowerCase().trim()) > -1){
+				if(formData.q && value.toString().toLowerCase().indexOf(formData.q.toLowerCase().trim()) > -1){
 					found = true;
 					break;
 				}
@@ -171,21 +173,35 @@ function loadSearchPanel(){
 }
 
 function loadVisits(){
-	let cardsContainer = document.getElementById('cart-visit');
-	cardsContainer.innerHTML = '';
-
 	if (isLoggedIn()){
-		const request = new Request();
 		request.getPosts().then((data)=>{
+			let cardsContainer = document.getElementById('card-visit');
+			cardsContainer.innerHTML = '';
+
+			let noCardsContainer = document.getElementById('no-cards'); 
+			if(data.length == 0){
+				noCardsContainer.classList.remove('hidden');
+			} else {
+				noCardsContainer.classList.add('hidden');
+			}
+
 			for (let i = 0; i < data.length; i++){
 				let dataObject = data[i];
-				let responseBox = createResponseCard(dataObject);
-				cardsContainer.append(responseBox);
+				let visitCard = new Visit(dataObject);
+				cardsContainer.append(visitCard);
 			}
 		});
 	} else {
-		cardsContainer.textContent = 'No visits';
+		noCards();
 	}
+}
+
+function noCards(){
+	let cardsContainer = document.getElementById('card-visit');
+	cardsContainer.innerHTML = '';
+
+	let noCardsContainer = document.getElementById('no-cards'); 
+	noCardsContainer.classList.remove('hidden');
 }
 
 window.onload = function(){

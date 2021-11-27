@@ -1,12 +1,12 @@
-// import Element from "./Elements.js";
-
-
-// import CONSTANTS from "./constants.js";
-
-// const { ROOT } = CONSTANTS;
-
+/**
+ * Modal class for generating Modal object
+ * @constructor
+ * @param {String} title - Popup title
+ * @param {Object} formClass - Popup content, the expected data type is DOM element
+ * @returns {Object} Modal object
+ */
 export default class Modal{
-    constructor(title, html){
+    constructor(title, body){
 		let modalHTML = `
 		<div class="js-modal card-modal modal fade show visit-modal">
 			<div class="modal-dialog modal-dialog-centered">
@@ -30,8 +30,8 @@ export default class Modal{
 		this.titleElement = this.modalElement.querySelector('.js-modal-title');
 		this.titleElement.textContent = title;
 
-		this.bodyElement = this.modalElement.querySelector('.js-modal-body');
-		this.bodyElement.appendChild(html);
+		this.bodyWrapper = this.modalElement.querySelector('.js-modal-body');
+		this.bodyWrapper.appendChild(body);
 
 		let closeBtn = this.modalElement.querySelector('.js-close');
 		closeBtn.addEventListener('click', (e)=>{
@@ -43,32 +43,40 @@ export default class Modal{
 		return this;
    }
 
+	/**
+	 * Method foe setting the title
+	 * @param {String} title - Popup title
+	 */
 	setTitle(title){
 		this.titleElement.textContent = title;
 	}
 
-	setBody(html){
-		this.bodyElement.innerHTML = html;
+	/**
+	 * Method for set/update popup content
+	 * @param {Object} body - Popup content DOM element
+	 */
+	setBody(body){
+		this.bodyElement.innerHTML = body;
 	}
 
+	/**
+	 * Method showing the popup
+	 */
 	open(){
 		this.modalElement.classList.add('modal-active');
 	}
 
+	/**
+	 * Method hidding the popup
+	 */
 	close(){
 		this.modalElement.classList.remove('modal-active');
 	}
 
+	/**
+	 * Method removing the popup
+	 */
 	destroy(){
 		this.modalElement.remove();
 	}
-   
 }
-
-
-// const selectDoctorContainer = document.querySelector('.select-doctor-container');
-// 	const modelwindow = document.querySelector(".modal")
-// 	const modelwindowClose = document.querySelector(".modal-header-btn")
-// 	modelwindowClose.addEventListener('click', () => {
-// 		modelwindow.classList.remove("modal-active")
-// 	})

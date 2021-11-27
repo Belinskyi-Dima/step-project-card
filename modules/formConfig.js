@@ -9,7 +9,8 @@ export default
 			"name":"email",
 			"placeholder": "Type your email",
 			"class": "email",
-			"label": "Email"
+			"label": "Email",
+			"value": "dmtrobelinskyi@icloud.com"
 		},
 		{
 			"type": "password",
@@ -17,7 +18,8 @@ export default
 			"name":"password",
 			"placeholder": "Type your password",
 			"class": "password",
-			"label": "Password"
+			"label": "Password",
+			"value": "dima1234"
 		},
 		{
 			"type": "submit",
@@ -150,6 +152,11 @@ export default
 				"id": "age",
 				"name":"age",
 				"label": "Age"
+			},
+			{
+				"type": "hidden",
+				"name":"status",
+				"value": "open"
 			}
 		]
 	},
@@ -205,6 +212,11 @@ export default
 				"id": "last-vists",
 				"name":"lastvists",
 				"label": "last Vist"
+			},
+			{
+				"type": "hidden",
+				"name":"status",
+				"value": "open"
 			}
 			
 		]
@@ -259,6 +271,11 @@ export default
 				"id": "date-vists",
 				"name":"datevists",
 				"label": "date last Vist"
+			},
+			{
+				"type": "hidden",
+				"name":"status",
+				"value": "open"
 			}
 		]
 	}
