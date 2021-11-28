@@ -228,19 +228,22 @@ export default
 				"type": "text",
 				"id": "full-name",
 				"name":"full-name",
-				"label": "Full name"
+				"label": "Full name",
+				"required": "required" 
+				
 			},
 			{
 				"type": "text",
 				"id": "visit-goal",
 				"name":"visit-goal",
-				"label": "Visit goal"
+				"label": "Visit goal",
+				
 			},
 			{
 				"type": "texttextArea",
 				"id": "short-description",
 				"name":"short-description",
-				"label": "Short description"
+				"label": "Short description",
 			},
 			{
 				"type": "select",

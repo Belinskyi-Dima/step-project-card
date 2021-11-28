@@ -15,6 +15,7 @@
 		this.name = fieldObject.name;
 		this.options = fieldObject.options;
 		this.value = fieldObject.value || '';
+		this.required =fieldObject.required ;
 
 		this.field = this.getField();
 		this.label = this._getLabel();
@@ -57,6 +58,7 @@
 		inputField.setAttribute('class', this.class);
 		inputField.setAttribute('type', this.type);
 		inputField.setAttribute('name', this.name);
+		inputField.setAttribute('required', this.required);
 		if(this.value){
 			inputField.setAttribute('value', this.value);
 		}
