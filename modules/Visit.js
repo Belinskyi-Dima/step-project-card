@@ -77,7 +77,7 @@ export default class Visit {
 		visitCard.append(cardBtnClose);
 	
 		// Render Visit Card Image
-		const imagePath = '../img/';
+		const imagePath = './img/';
 		const src = imagePath + data.doctor + '.jpeg';
 		cardImg.setAttribute('src',src);
 		cardImg.classList.add("card-img");
